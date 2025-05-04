@@ -5,9 +5,8 @@ import os
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
 
-# Armazena os dados temporariamente
-dados_cadastrados = []
-
+# Lista única para armazenar os cadastros
+cadastros = []
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -22,6 +21,7 @@ def index():
         links = request.form.get("links")
         doc = request.files["documento"]
 
+        # Valida o documento e o link
         if doc and validar_documento(doc.filename):
             caminho = os.path.join("static", doc.filename)
             doc.save(caminho)
@@ -30,7 +30,7 @@ def index():
                 flash("Link inválido! Deve começar com http:// ou https://", "erro")
                 return redirect(url_for("index"))
 
-            dados_cadastrados.append({
+            cadastros.append({
                 "nome": nome,
                 "endereco": endereco,
                 "cpf": cpf,
@@ -49,11 +49,9 @@ def index():
 
     return render_template("index.html")
 
-
 @app.route("/sucesso")
 def sucesso():
-    return render_template("sucesso.html", dados=dados_cadastrados)
-
+    return render_template("sucesso.html", cadastros=cadastros)
 
 if __name__ == "__main__":
     app.run(debug=True)
