@@ -92,7 +92,11 @@
                     <p><strong>Links:</strong> 
                         <a href="{{ c['links'] }}" target="_blank">{{ c['links'] }}</a>
                     </p>
-                    <p><strong>Arquivo PDF:</strong> {{ c['documento'] }}</p>
+                    <p><strong>Arquivo PDF:</strong> 
+                        <a href="{{ url_for('uploaded_file', filename=c['documento']) }}" target="_blank">
+                            {{ c['documento'] }}
+                        </a>
+                    </p>             
                 </div>
             {% endfor %}
         {% else %}

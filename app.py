@@ -5,7 +5,11 @@ import os
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
 
-# Lista única para armazenar os cadastros
+# Caminho absoluto para a pasta de uploads
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Lista para armazenar cadastros
 cadastros = []
 
 @app.route("/", methods=["GET", "POST"])
@@ -21,9 +25,11 @@ def index():
         links = request.form.get("links")
         doc = request.files["documento"]
 
-        # Valida o documento e o link
         if doc and validar_documento(doc.filename):
-            caminho = os.path.join("static", doc.filename)
+            # Garante que a pasta uploads exista
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+            caminho = os.path.join(app.config['UPLOAD_FOLDER'], doc.filename)
             doc.save(caminho)
 
             if not validar_link(links):
@@ -52,6 +58,13 @@ def index():
 @app.route("/sucesso")
 def sucesso():
     return render_template("sucesso.html", cadastros=cadastros)
+
+from flask import send_from_directory
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
