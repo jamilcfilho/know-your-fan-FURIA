@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Know Your Fan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Formulário do Fã</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <p class="flash {{ category }}">{{ message }}</p>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <label>Nome:</label><input type="text" name="nome" required><br>
+        <label>Endereço:</label><input type="text" name="endereco" required><br>
+        <label>CPF:</label><input type="text" name="cpf" required><br>
+        <label>Interesses em e-sports:</label><textarea name="interesses" required></textarea><br>
+        <label>Email:</label><input type="email" name="email" required><br>
+        <label>Eventos que participou recentemente:</label><textarea name="eventos" required></textarea><br>
+        <label>Compras recentes de e-sports:</label><textarea name="compras" required></textarea><br>
+        <label>Link do perfil (Twitter, Steam, etc):</label><input type="url" name="links" required><br>
+        <label>Documento (PDF):</label><input type="file" name="documento" accept=".pdf" required><br>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
