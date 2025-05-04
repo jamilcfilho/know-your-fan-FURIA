@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from helpers import validar_documento, validar_link
 import os
 
@@ -23,14 +23,20 @@ def index():
         eventos = request.form.get("eventos")
         compras = request.form.get("compras")
         links = request.form.get("links")
-        doc = request.files["documento"]
+        doc = request.files.get("documento")
 
         if doc and validar_documento(doc.filename):
             # Garante que a pasta uploads exista
             os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
             caminho = os.path.join(app.config['UPLOAD_FOLDER'], doc.filename)
-            doc.save(caminho)
+            print(f"Salvando arquivo em: {caminho}")  # ← Isso ajuda a depurar
+
+            try:
+                doc.save(caminho)
+            except Exception as e:
+                flash(f"Erro ao salvar o arquivo: {e}", "erro")
+                return redirect(url_for("index"))
 
             if not validar_link(links):
                 flash("Link inválido! Deve começar com http:// ou https://", "erro")
@@ -59,12 +65,9 @@ def index():
 def sucesso():
     return render_template("sucesso.html", cadastros=cadastros)
 
-from flask import send_from_directory
-
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
