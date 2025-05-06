@@ -88,3 +88,8 @@ Este projeto está em fase inicial, com foco em prototipação. Futuras melhoria
 
 Sugestões, críticas e melhorias são sempre bem-vindas em um projeto dessa magnituded. 
 Fique à vontade para abrir uma *issue* ou enviar um *pull request*.
+
+
+## 📸 Imagens do Projeto
+
+![Imagem 1](imagens/Pagina_inicial_cadastro_completa.jpg) ![Imagem 2](imagens/Pagina_inicial_cadastro.jpg) ![Imagem 3](imagens/Final_pagina_cadastro.jpg) ![Imagem 4](imagens/Cadastros_recebidos.jpg)
